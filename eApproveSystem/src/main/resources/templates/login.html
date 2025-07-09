@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - eApproveSystem</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+        :root {
+            --primary-color: #4a90e2;
+            --primary-hover-color: #357abd;
+            --background-color: #f7f9fc;
+            --form-background-color: #ffffff;
+            --text-color: #333333;
+            --subtle-text-color: #767676;
+            --border-color: #e0e0e0;
+            --error-color: #d93025;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--background-color);
+            margin: 0;
+        }
+
+        .login-wrapper {
+            width: 400px;
+            padding: 40px;
+            background-color: var(--form-background-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(149, 157, 165, 0.2);
+            text-align: center;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin: 0;
+            font-weight: 700;
+        }
+        
+        .logo p {
+            color: var(--subtle-text-color);
+            font-size: 14px;
+        }
+
+        .login-form .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .login-form .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .login-form .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .form-options .remember-me {
+            display: flex;
+            align-items: center;
+            color: var(--subtle-text-color);
+        }
+        
+        .form-options .remember-me input {
+            margin-right: 8px;
+        }
+
+        .form-options a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .form-options a:hover {
+            text-decoration: underline;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-hover-color);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-bottom: 15px;
+            height: 20px; /* Reserve space for the message */
+            text-align: center;
+        }
+
+        .divider {
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--subtle-text-color);
+            font-size: 12px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .divider:not(:empty)::before {
+            margin-right: .25em;
+        }
+
+        .divider:not(:empty)::after {
+            margin-left: .25em;
+        }
+
+        .social-login .social-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--form-background-color);
+            cursor: pointer;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        
+        .social-login .social-btn:hover {
+            background-color: #f2f2f2;
+        }
+
+        .social-login .social-btn img {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+        }
+
+        .signup-link {
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--subtle-text-color);
+        }
+
+        .signup-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="logo">
+            <h1>eApproveSystem</h1>
+            <p>전자결재 시스템에 오신 것을 환영합니다.</p>
+        </div>
+
+        <form id="login-form" class="login-form">
+            <div class="input-group">
+                <input type="text" id="username" name="username" placeholder="사용자 이름" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder="비밀번호" required>
+            </div>
+            <div class="form-options">
+            </div>
+            <div id="error-message" class="error-message"></div>
+            <button type="submit" class="submit-btn">로그인</button>
+        </form>
+		
+        <div class="signup-link">
+            관리자 권한 요청: (내선) 6241
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // 폼의 기본 제출 동작(새로고침)을 막습니다.
+
+            // 입력된 값 가져오기
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // 서버로 보낼 데이터 객체 생성
+            const memberDto = {
+                username: username,
+                password: password
+            };
+
+            try {
+                // 서버의 /logincheck 엔드포인트로 POST 요청 보내기
+                const response = await fetch('/member/logincheck', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(memberDto)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // 로그인 성공 시
+                    errorMessage.textContent = '';
+                    alert(result.message); // 성공 메시지 표시
+                    location.href = '/approval'; // 메인 페이지로 리디렉션 (경로는 실제 환경에 맞게 수정)
+                } else {
+                    // 로그인 실패 시 (401 Unauthorized 등)
+                    errorMessage.textContent = result.message || '로그인에 실패했습니다.';
+                   
+                }
+            } catch (error) {
+                // 네트워크 오류 등 예외 발생 시
+                console.error('Login error:', error);
+                errorMessage.textContent = '로그인 중 오류가 발생했습니다. 다시 시도해주세요.';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,6 +1,8 @@
 package com.example.eApproveSystem.entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,7 +25,8 @@ public class Notice {
 	
 	private String b_title;
 	private String b_content;
-	private Date b_created_at;
+	@CreatedDate
+	private LocalDateTime b_created_at;
 	private Integer b_view;
 	
 	

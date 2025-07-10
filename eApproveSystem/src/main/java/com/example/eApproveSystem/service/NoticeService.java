@@ -21,7 +21,7 @@ public class NoticeService {
 	@Autowired
 	private PendingRepository pendingRepository;
 
-	// DTO → Entity
+	// DTO → Entity (Pending)
 	public Pending convertToEntity(PendingDto dto) {
 		Pending entity = new Pending();
 		entity.setP_id(dto.getP_id());
@@ -35,7 +35,7 @@ public class NoticeService {
 		return entity;
 	}
 
-	// Entity → DTO
+	// Entity → DTO (Pending)
 	public PendingDto convertToDto(Pending entity) {
 		PendingDto dto = new PendingDto();
 		dto.setP_id(entity.getP_id());
@@ -48,10 +48,53 @@ public class NoticeService {
 		dto.setRejected_comment(entity.getRejected_comment());
 		return dto;
 	}
+	
+	// DTO → Entity (Notice)
+	public Notice convertToNoticeEntity(NoticeDto dto) {
+		Notice entity = new Notice();
+		entity.setB_id(dto.getB_id());
+		entity.setB_title(dto.getB_title());
+		entity.setB_content(dto.getB_content());
+		entity.setB_view(dto.getB_view());
+		return entity;
+	}
 
+	// Entity → DTO (Notice)
+	public NoticeDto convertToNoticeDto(Notice entity) {
+		NoticeDto dto = new NoticeDto();
+		dto.setB_id(entity.getB_id());
+		dto.setB_title(entity.getB_title());
+		dto.setB_content(entity.getB_content());
+		dto.setB_view(entity.getB_view());
+		return dto;
+	}
+	
+	// 결재 대기 테이블에 적재 (신규 등록)
 	public void registrationRequest(PendingDto pendingDto) {
 		pendingRepository.save(convertToEntity(pendingDto));
-
+	}
+	
+	// 결재 상태 업데이트 (기존 데이터 수정)
+	public void updatePendingStatus(PendingDto pendingDto) {
+	    Optional<Pending> existingPending = pendingRepository.findById(pendingDto.getP_id());
+	    if (existingPending.isPresent()) {
+	        Pending pending = existingPending.get();
+	        pending.setStatus(pendingDto.getStatus());
+	        pending.setRejected_comment(pendingDto.getRejected_comment());
+	        pendingRepository.save(pending);
+	        System.out.println("결재 상태 업데이트 완료: ID=" + pendingDto.getP_id() + ", 상태=" + pendingDto.getStatus());
+	    } else {
+	        throw new RuntimeException("해당 결재 문서를 찾을 수 없습니다.");
+	    }
+	}
+	
+	// 공지사항 테이블에 적재
+	public void registNotice(NoticeDto noticeDto) {
+		System.out.println("전송된 데이터: " + noticeDto);
+		// 실제로 Notice 테이블에 저장
+		Notice notice = convertToNoticeEntity(noticeDto);
+		noticeRepository.save(notice);
+		System.out.println("공지사항 등록 완료: " + noticeDto.getB_title());
 	}
 
 	public List<NoticeDto> getNotionList() {
@@ -62,7 +105,6 @@ public class NoticeService {
 			dto.setB_id(n.getB_id());
 			dto.setB_title(n.getB_title());
 			dto.setB_content(n.getB_content());
-			dto.setB_created_at(n.getB_created_at());
 			dto.setB_view(n.getB_view());
 			dtoList.add(dto);
 		}
@@ -88,10 +130,6 @@ public class NoticeService {
 	}
 
 	public Optional<PendingDto> getpendinListByPid(Integer p_id) {
-		Optional<Pending> pending = pendingRepository.findById(p_id);
-	
-	    return pendingRepository.findById(p_id).map(this::convertToDto);
-		
+		return pendingRepository.findById(p_id).map(this::convertToDto);
 	}
-
 }

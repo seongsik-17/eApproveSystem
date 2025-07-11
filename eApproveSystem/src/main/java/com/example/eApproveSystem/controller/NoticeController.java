@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.eApproveSystem.dto.MemberDto;
 import com.example.eApproveSystem.dto.NoticeDto;
 import com.example.eApproveSystem.dto.PendingDto;
 import com.example.eApproveSystem.service.NoticeService;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/notice")
@@ -25,7 +28,12 @@ public class NoticeController {
 	
 	// 권한 검증 메서드
 	private boolean isAuthorized(String username) {
-		return "MASTER".equals(username);
+		/**if(username.equals("master") || username.equals("admin")) {
+			return true;
+		}
+		return false;
+		**/
+		return true;
 	}
 	
 	// 권한 에러 응답 생성 메서드
@@ -45,16 +53,20 @@ public class NoticeController {
 	}
 	
 	@GetMapping("/getPendingList")
-	public ResponseEntity<?> getPendingList(@RequestHeader(value = "Username", required = false) String username) {
+	public ResponseEntity<?> getPendingList(HttpSession session) {
 		// MASTER 권한 검증
-		if (!isAuthorized(username)) {
+		MemberDto userInfo = (MemberDto) session.getAttribute("userInfo");
+		if (!isAuthorized(userInfo.getUsername())) {
+			System.out.println("사용자 인증실패");
 			return unauthorizedResponse();
 		}
+		System.out.println("GetPendingList 사용자 인증 통과");
 		
 		try {
 			List<PendingDto> pendingList = noticeService.getPendingList();
 			return ResponseEntity.ok(pendingList);
 		} catch (Exception e) {
+			System.out.println("목록 조회 실패!!!!");
 			return ResponseEntity.badRequest().body("결재 목록 조회 중 오류가 발생했습니다: " + e.getMessage());
 		}
 	}
@@ -64,10 +76,11 @@ public class NoticeController {
 			@RequestBody PendingDto pendingDto, 
 			@RequestHeader(value = "Username", required = false) String username) {
 		
-		// MASTER 권한 검증
+		/** MASTER 권한 검증
 		if (!isAuthorized(username)) {
 			return unauthorizedResponse();
 		}
+		**/
 		
 		try {
 			noticeService.registrationRequest(pendingDto);
@@ -82,10 +95,11 @@ public class NoticeController {
 			@RequestParam("p_id") Integer p_id,
 			@RequestHeader(value = "Username", required = false) String username) {
 		
-		// MASTER 권한 검증
+		/** MASTER 권한 검증
 		if (!isAuthorized(username)) {
 			return unauthorizedResponse();
 		}
+		**/
 		
 		try {
 			Optional<PendingDto> dto = noticeService.getpendinListByPid(p_id);
@@ -102,10 +116,11 @@ public class NoticeController {
 	@PostMapping("/uploadApprove")
 	public ResponseEntity<String> uploadApprove(
 			@RequestBody PendingDto pendingDto,
-			@RequestHeader(value = "Username", required = false) String username) {
-		
+			HttpSession session) {
+		MemberDto member = (MemberDto) session.getAttribute("userInfo");
 		// MASTER 권한 검증
-		if (!isAuthorized(username)) {
+		if (!isAuthorized(member.getUsername())) {
+			System.out.println("uploadApprove: 인증실패");
 			return unauthorizedResponse();
 		}
 		

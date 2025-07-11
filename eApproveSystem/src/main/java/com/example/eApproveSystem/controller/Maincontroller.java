@@ -1,7 +1,11 @@
 package com.example.eApproveSystem.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class Maincontroller {
@@ -11,7 +15,8 @@ public class Maincontroller {
 		return "login";
 	}
 	@GetMapping("/approval")
-	public String approval() {
+	public String approval(HttpSession session,Model model) {
+		model.addAttribute("userInfo",session.getAttribute("userInfo"));
 		return "approval";
 	}
 	

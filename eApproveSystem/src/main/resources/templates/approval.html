@@ -22,8 +22,8 @@
 </ul>
 </div>
 <div class="nav-right">
-<span class="user-info" th:text="|${userInfo.username}, ${userInfo.email}|"></span>
-<button class="logout-btn" data-menu="logout">로그아웃</button>
+<span class="user-info" th:text="|접속중인 사용자: ${userInfo.username}님(${userInfo.email})|"></span>
+<button class="logout-btn" onclick="logout()">로그아웃</button>
 </div>
 </nav>
 <div class="container">

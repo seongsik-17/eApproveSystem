@@ -34,7 +34,7 @@ public class MemberController {
 		Map<String, Object> response = new HashMap<>();
 		if (memberService.logincheck(memberDto)) {
 			
-			session.setAttribute("userInfo", memberDto);
+			session.setAttribute("userInfo", memberService.getUserInfoByUsername(memberDto.getUsername()));
 			return ResponseEntity.ok(Map.of("status", "success", "message", "로그인에 성공했습니다."));
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

@@ -74,13 +74,7 @@ public class NoticeController {
 	@PostMapping("/writeApproval")
 	public ResponseEntity<String> writeApproval(
 			@RequestBody PendingDto pendingDto, 
-			@RequestHeader(value = "Username", required = false) String username) {
-		
-		/** MASTER 권한 검증
-		if (!isAuthorized(username)) {
-			return unauthorizedResponse();
-		}
-		**/
+			HttpSession session) {
 		
 		try {
 			noticeService.registrationRequest(pendingDto);
@@ -117,10 +111,10 @@ public class NoticeController {
 	public ResponseEntity<String> uploadApprove(
 			@RequestBody PendingDto pendingDto,
 			HttpSession session) {
-		MemberDto member = (MemberDto) session.getAttribute("userInfo");
+		
 		// MASTER 권한 검증
-		if (!isAuthorized(member.getUsername())) {
-			System.out.println("uploadApprove: 인증실패");
+		MemberDto userInfo = (MemberDto) session.getAttribute("userInfo");
+		if(!userInfo.getRoll().equals("MASTER")) {
 			return unauthorizedResponse();
 		}
 		

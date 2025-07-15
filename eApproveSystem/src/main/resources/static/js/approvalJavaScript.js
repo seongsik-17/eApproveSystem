@@ -16,10 +16,10 @@ const topMenu = document.querySelector('.topMenu'); // HTML에서는 class="topM
 const sidebarMenu = document.getElementById('sidebarMenu'); // HTML에서는 id="sidebarMenu"  
 const mainContentArea = document.getElementById('main-content-area'); // HTML에서는 id="main-content-area"
 
-// 소분류 매뉴들
+// 소분류 매뉴 배열
 const submenus = {
-	'approval': ['결재 문서 조회'],
-	'notice': ['공지사항 목록', '공지사항 등록', '결재 대기 목록', '처리된 문서'],
+	'approval': ['결재 문서 조회', '결재 대기 목록', '처리된 문서'],
+	'notice': ['공지사항 목록', '공지사항 등록'],
 	'product': ['상품 목록', '상품 등록'],
 	'report': ['일일 보고서', '주간 보고서', '월간 보고서']
 };
@@ -156,10 +156,11 @@ function viewNoticeContent(b_id) {
                     
                     <div class="form-group">
                         <h3>내용</h3>
-                        <div style="padding: 15px; border: 1px solid #ddd; border-radius: 5px; 
-                                    background-color: #f8f9fa; min-height: 200px; white-space: pre-wrap;">
-                            ${notice.b_content || '내용이 없습니다.'}
-                        </div>
+						<div style="padding: 15px; border: 1px solid #ddd; border-radius: 5px;
+						            background-color: #f8f9fa; min-height: 200px;">
+						    ${notice.b_content || '내용이 없습니다.'}
+						</div>
+
                     </div>
                     
                     <div style="display: flex; justify-content: space-between; align-items: center; 
@@ -449,7 +450,7 @@ function viewCompleteList() {
 		});
 }
 
-// 전체 목록 보기 함수 (필요시 사용)
+//공지사항 전체 조회(처리된 문서)
 function showAllNoticeList() {
 	console.log("전체 목록 조회 시작");
 
@@ -523,12 +524,12 @@ function showAllNoticeList() {
 			alert('데이터 조회 중 오류가 발생했습니다: ' + err.message);
 		});
 }
-
+//미구현된 페이지에 접속 시 디폴트 값
 function showPlaceholderContent(menuKey) {
 	const menuName = topMenu.querySelector(`[data-menu="${menuKey}"]`).textContent;
 	mainContentArea.innerHTML = `<h1>${menuName}</h1><p>이 페이지의 콘텐츠는 아직 구현되지 않았습니다.</p>`;
 }
-
+//상위 메뉴에 따라 사이드 바 메뉴 업데이트
 function updateSidebar(menuKey) {
 	const menuName = topMenu.querySelector(`[data-menu="${menuKey}"]`).textContent;
 	document.getElementById('sidebar-title').textContent = menuName;
@@ -541,7 +542,7 @@ function updateSidebar(menuKey) {
 		sidebarMenu.appendChild(document.createElement('li')).appendChild(a);
 	});
 }
-
+//공지사항 등록 및 결재상신 Function
 function userApprovalFunction() {
 	const title = document.querySelector('input[name=title]').value;
 	const content = document.querySelector('textarea[name=content]').value;
@@ -616,7 +617,7 @@ async function handleDecision(p_id, status, rejected_comment = '') {
 		});
 
 		if (!response.ok) {
-			throw new Error('Network response was not ok');
+			throw new Error('결재권한 확인 필요!!');
 		}
 
 		const result = await response.text();
@@ -638,7 +639,8 @@ topMenu.addEventListener('click', e => {
 	e.preventDefault();
 	const menuKey = e.target.dataset.menu;
 	updateSidebar(menuKey);
-	if (menuKey === 'notice') showPendingNoticeList();
+	if (menuKey === 'notice') showNoticeList();
+	else if(menuKey === 'approval')showPendingNoticeList();
 	else if (menuKey === 'logout') logout();
 	else showPlaceholderContent(menuKey);
 });

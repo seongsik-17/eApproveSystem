@@ -17,6 +17,9 @@ public class Maincontroller {
 	@GetMapping("/approval")
 	public String approval(HttpSession session,Model model) {
 		model.addAttribute("userInfo",session.getAttribute("userInfo"));
+		if(session.getAttribute("userInfo") == null) {
+			return "login";
+		}
 		return "approval";
 	}
 	

@@ -29,30 +29,29 @@ Spring Boot 기반의 사내 전자결재 시스템입니다. 결재 요청, 승
 ##  프로젝트 폴더 구조
 
 ├── controller
-│ ├── MainController.java
-│ ├── MemberController.java
-│ └── NoticeController.java
+│   ├── MainController.java
+│   ├── MemberController.java
+│   └── NoticeController.java
 ├── dto
-│ ├── MemberDto.java
-│ ├── NoticeDto.java
-│ └── PendingDto.java
+│   ├── MemberDto.java
+│   ├── NoticeDto.java
+│   └── PendingDto.java
 ├── entity
-│ ├── Member.java
-│ ├── Notice.java
-│ └── Pending.java
+│   ├── Member.java
+│   ├── Notice.java
+│   └── Pending.java
 ├── repository
-│ ├── MemberRepository.java
-│ ├── NoticeRepository.java
-│ └── PendingRepository.java
+│   ├── MemberRepository.java
+│   ├── NoticeRepository.java
+│   └── PendingRepository.java
 ├── service
-│ ├── CertificateService.java
-│ ├── MemberService.java
-│ └── NoticeService.java
+│   ├── CertificateService.java
+│   ├── MemberService.java
+│   └── NoticeService.java
 └── resources
-├── static/
-├── templates/
-└── application.properties
-
+    ├── static/
+    ├── templates/
+    └── application.properties
 ## ⚙️ 실행 방법(시현 영상으로 대체 예정)
 
 ```bash
